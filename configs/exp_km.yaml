@@ -1,0 +1,57 @@
+# Configuración para K-means clustering en Bank Marketing
+project_name: "bank_marketing_kmeans"
+random_seed: 42
+
+# Rutas
+data:
+  raw_path: "data/raw/bank-additional-full.csv"
+  separator: ";"
+  target_column: "y"
+  task_type: "classification"
+
+# División de datos (solo usamos train para clustering)
+split:
+  test_size: 0.2
+  stratify: true
+  shuffle: true
+
+# Preprocesamiento (solo features numéricas para K-means)
+preprocessing:
+  numeric_features:
+    - age
+    - duration
+    - campaign
+    - pdays
+    - previous
+    - emp.var.rate
+    - cons.price.idx
+    - cons.conf.idx
+    - euribor3m
+    - nr.employed
+  
+  categorical_features: []  # No usar categóricas en K-means
+  
+  imputation:
+    numeric_strategy: "median"
+  
+  scaling:
+    method: "standard"  # Crítico para K-means
+
+# K-means clustering
+kmeans:
+  k_range: [2, 3, 4, 5, 6, 7, 8]  # Rango de clusters a evaluar
+  n_init: 10  # Número de inicializaciones aleatorias
+  max_iter: 300  # Máximo de iteraciones
+  metrics:
+    - "inertia"
+    - "silhouette"
+    - "calinski_harabasz"
+    - "davies_bouldin"
+
+# Salidas
+output:
+  base_dir: "outputs"
+  models_dir: "outputs/models"
+  reports_dir: "outputs/reports"
+  figures_dir: "outputs/figures"
+  logs_dir: "outputs/logs"

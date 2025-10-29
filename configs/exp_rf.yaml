@@ -1,0 +1,128 @@
+# Configuración para tuning de RandomForest en Bank Marketing
+project_name: "bank_marketing_rf_tuning"
+random_seed: 42
+
+# Rutas
+data:
+  raw_path: "data/raw/bank-additional-full.csv"
+  separator: ";"
+  target_column: "y"
+  task_type: "classification"
+
+# Validación del esquema
+schema:
+  expected_columns:
+    - age
+    - job
+    - marital
+    - education
+    - default
+    - housing
+    - loan
+    - contact
+    - month
+    - day_of_week
+    - duration
+    - campaign
+    - pdays
+    - previous
+    - poutcome
+    - emp.var.rate
+    - cons.price.idx
+    - cons.conf.idx
+    - euribor3m
+    - nr.employed
+    - y
+  max_null_percentage: 0.05
+
+# División de datos
+split:
+  test_size: 0.2
+  stratify: true
+  shuffle: true
+
+# Preprocesamiento
+preprocessing:
+  numeric_features:
+    - age
+    - duration
+    - campaign
+    - pdays
+    - previous
+    - emp.var.rate
+    - cons.price.idx
+    - cons.conf.idx
+    - euribor3m
+    - nr.employed
+  
+  categorical_features:
+    - job
+    - marital
+    - education
+    - default
+    - housing
+    - loan
+    - contact
+    - month
+    - day_of_week
+    - poutcome
+  
+  imputation:
+    numeric_strategy: "median"
+    categorical_strategy: "most_frequent"
+  
+  scaling:
+    method: "standard"
+  
+  pca:
+    enabled: false  # Desactivado para mejor interpretabilidad
+    variance_ratio: 0.95
+
+# Validación cruzada
+cross_validation:
+  n_splits: 5
+  shuffle: true
+
+# Métricas
+metrics:
+  classification:
+    primary: "roc_auc"  # Métrica principal para el dataset desbalanceado
+    secondary:
+      - "average_precision"
+      - "balanced_accuracy"
+      - "f1"
+
+# Modelos supervisados
+supervised_models:
+  baseline:
+    model_type: "logistic_regression"
+    params:
+      max_iter: 1000
+      class_weight: "balanced"
+  
+  random_forest:
+    model_type: "random_forest"
+    class_weight: "balanced"  # Importante para dataset desbalanceado
+    
+    # Tuning etapa 1: RandomizedSearch (exploración amplia)
+    randomized_search:
+      n_iter: 30  # Aumentado para mejor exploración
+      params:
+        n_estimators: [100, 200, 300, 400, 500]
+        max_depth: [10, 15, 20, 25, 30, null]
+        max_features: ["sqrt", "log2", 0.3, 0.5, 0.7]
+        min_samples_split: [2, 5, 10, 15, 20]
+        min_samples_leaf: [1, 2, 4, 6, 8]
+        bootstrap: [true]
+    
+    # Tuning etapa 2: GridSearch (refinamiento)
+    grid_search:
+      enabled: true
+
+# Salidas
+output:
+  base_dir: "outputs"
+  models_dir: "outputs/models"
+  reports_dir: "outputs/reports"
+  figures_dir: "outputs/figures"
+  logs_dir: "outputs/logs"
