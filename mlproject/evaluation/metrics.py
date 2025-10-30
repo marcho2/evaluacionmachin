@@ -61,7 +61,7 @@ class ModelEvaluator:
         Returns:
             Diccionario con todas las métricas
         """
-        logger.info(f"Evaluating classification model: {model_name}")
+        logger.info(f"Evaluando modelo de clasificacion: {model_name}")
         
         results = {
             'model_name': model_name,
@@ -118,7 +118,7 @@ class ModelEvaluator:
         Returns:
             Diccionario con todas las métricas
         """
-        logger.info(f"Evaluating regression model: {model_name}")
+        logger.info(f"Evaluando modelo de regresion: {model_name}")
         
         results = {
             'model_name': model_name,
@@ -170,7 +170,7 @@ class ModelEvaluator:
         if save:
             filename = self.figures_dir / f"confusion_matrix_{model_name}.png"
             plt.savefig(filename, dpi=300, bbox_inches='tight')
-            logger.info(f"Confusion matrix saved to: {filename}")
+            logger.info(f"Matriz de Confusion guardado en: {filename}")
             plt.close()
             return str(filename)
         else:
@@ -217,7 +217,7 @@ class ModelEvaluator:
         if save:
             filename = self.figures_dir / f"roc_curve_{model_name}.png"
             plt.savefig(filename, dpi=300, bbox_inches='tight')
-            logger.info(f"ROC curve saved to: {filename}")
+            logger.info(f"Curva ROC guardada en: {filename}")
             plt.close()
             return str(filename)
         else:
@@ -405,7 +405,7 @@ class ModelEvaluator:
         Returns:
             Diccionario con todos los resultados y rutas de figuras
         """
-        logger.info(f"Generating full evaluation report for {model_name}...")
+        logger.info(f"Generando informe de evaluacion para {model_name}...")
         
         report = {
             'model_name': model_name,
@@ -469,5 +469,5 @@ class ModelEvaluator:
                 name: float(imp) for name, imp in zip(feature_names, importances)
             }
         
-        logger.info(f"Full evaluation report completed for {model_name}")
+        logger.info(f"Informe de evaluación completo para{model_name}")
         return report

@@ -48,12 +48,12 @@ class KMeansAnalyzer:
         if k_range is None:
             k_range = self.config.get('kmeans.k_range', [2, 3, 4, 5, 6, 7, 8, 9, 10])
         
-        logger.info(f"Evaluating K-means for k in {k_range}")
+        logger.info(f"Evaluando K-means con k en {k_range}")
         
         metrics_list = []
         
         for k in k_range:
-            logger.info(f"Training K-means with k={k}...")
+            logger.info(f"Entrenando K-means con k={k}...")
             
             # Construir y entrenar pipeline
             pipeline = self.kmeans_pipeline_builder.build_kmeans_pipeline(k)
@@ -79,7 +79,7 @@ class KMeansAnalyzer:
         results_df = pd.DataFrame(metrics_list)
         self.results['metrics_by_k'] = results_df
         
-        logger.info("K-means evaluation completed")
+        logger.info("K-means completado")
         return results_df
     
     def _calculate_metrics(self, X_transformed, labels, k: int) -> Dict:
@@ -124,32 +124,32 @@ class KMeansAnalyzer:
             Mejor valor de k
         """
         if 'metrics_by_k' not in self.results:
-            raise ValueError("Must run evaluate_k_range() first")
+            raise ValueError("Hay que evaluar en k_range() primero")
         
         df = self.results['metrics_by_k']
         
         if method == 'silhouette':
             # Mayor es mejor
             best_k = int(df.loc[df['silhouette'].idxmax(), 'k'])
-            logger.info(f"Best k by silhouette: {best_k}")
+            logger.info(f"Mejor k por silhouette: {best_k}")
         
         elif method == 'calinski_harabasz':
             # Mayor es mejor
             best_k = int(df.loc[df['calinski_harabasz'].idxmax(), 'k'])
-            logger.info(f"Best k by Calinski-Harabasz: {best_k}")
+            logger.info(f"Mejor k por Calinski-Harabasz: {best_k}")
         
         elif method == 'davies_bouldin':
             # Menor es mejor
             best_k = int(df.loc[df['davies_bouldin'].idxmin(), 'k'])
-            logger.info(f"Best k by Davies-Bouldin: {best_k}")
+            logger.info(f"Mejor k por Davies-Bouldin: {best_k}")
         
         elif method == 'elbow':
             # Usar método del codo (detectar punto de inflexión)
             best_k = self._detect_elbow(df['k'].values, df['inertia'].values)
-            logger.info(f"Best k by elbow method: {best_k}")
+            logger.info(f"Mejor k por metodo del codo : {best_k}")
         
         else:
-            raise ValueError(f"Unknown method: {method}")
+            raise ValueError(f"Metodo desconocido: {method}")
         
         self.best_k = best_k
         return best_k
@@ -198,10 +198,10 @@ class KMeansAnalyzer:
         if k is None:
             k = self.best_k
             if k is None:
-                raise ValueError("Must specify k or run select_best_k() first")
+                raise ValueError("Especifica k o prepara k con k_range")
         
         if k not in self.fitted_pipelines:
-            raise ValueError(f"K={k} not fitted. Run evaluate_k_range() first")
+            raise ValueError(f"K={k} no ajusta. Evalua con k_range")
         
         pipeline = self.fitted_pipelines[k]
         kmeans = pipeline.named_steps['kmeans']
@@ -245,10 +245,10 @@ class KMeansAnalyzer:
         if k is None:
             k = self.best_k
             if k is None:
-                raise ValueError("Must specify k or run select_best_k() first")
+                raise ValueError("Especifica k o evalua con k_range")
         
         if k not in self.fitted_pipelines:
-            raise ValueError(f"K={k} not fitted")
+            raise ValueError(f"K={k} no ajusta")
         
         pipeline = self.fitted_pipelines[k]
         labels = pipeline.predict(X)
@@ -269,7 +269,7 @@ class KMeansAnalyzer:
         if k is None:
             k = self.best_k
             if k is None:
-                raise ValueError("Must specify k or run select_best_k() first")
+                raise ValueError("Especifica k o evalua con k_range")
         
         # Predecir clusters
         labels = self.predict_clusters(X_train, k)
@@ -295,7 +295,7 @@ class KMeansAnalyzer:
             }
         
         self.results[f'cluster_analysis_k{k}'] = analysis
-        logger.info(f"Cluster characteristics analyzed for k={k}")
+        logger.info(f"Caracteristicas de Cluster analizadas con k={k}")
         
         return analysis
     
@@ -325,7 +325,7 @@ class KMeansAnalyzer:
             'mean_centroid_value': centroids_df.mean(axis=0)[variances.index].values
         }).head(top_n)
         
-        logger.info(f"Top {top_n} features differentiating clusters:")
+        logger.info(f"Top {top_n} características que diferencian clusters:")
         for _, row in differences.iterrows():
             logger.info(f"  {row['feature']}: variance={row['variance_between_clusters']:.4f}")
         
@@ -342,7 +342,7 @@ class KMeansAnalyzer:
         if k is None:
             k = self.best_k
             if k is None:
-                raise ValueError("Must specify k or run select_best_k() first")
+                raise ValueError("Especifica k o evalua con k_range")
         
         if k not in self.fitted_pipelines:
             raise ValueError(f"K={k} not fitted")

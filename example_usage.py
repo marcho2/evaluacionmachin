@@ -305,25 +305,12 @@ def example_custom_analysis():
 
 
 if __name__ == "__main__":
-    """
-    Ejecutar ejemplos:
-    
-    python example_usage.py
-    """
-    
-    # Descomentar el ejemplo que quieras ejecutar:
-    
-    # Ejemplo 1: Flujo supervisado completo (baseline + tuning)
     example_supervised_workflow()
     
-    # Ejemplo 2: Flujo de clustering completo
-    # example_clustering_workflow()
+    example_clustering_workflow()
     
-    # Ejemplo 3: Comparar múltiples modelos
-    # example_compare_models()
+    example_compare_models()
     
-    # Ejemplo 4: Análisis personalizado
-    # example_custom_analysis()
     
     print("\n" + "="*60)
     print("✓ ALL EXAMPLES COMPLETED")

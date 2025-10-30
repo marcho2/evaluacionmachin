@@ -28,7 +28,7 @@ class Config:
     def _load_config(self) -> Dict[str, Any]:
         """Carga el archivo de configuración YAML."""
         if not self.config_path.exists():
-            raise FileNotFoundError(f"Config file not found: {self.config_path}")
+            raise FileNotFoundError(f"Archivo de configuracion no encontrado: {self.config_path}")
         
         with open(self.config_path, 'r') as f:
             config = yaml.safe_load(f)
@@ -53,7 +53,7 @@ class Config:
         )
         
         self.logger = logging.getLogger(__name__)
-        self.logger.info(f"Configuration loaded from: {self.config_path}")
+        self.logger.info(f"Configuracion cargada desde: {self.config_path}")
     
     def _setup_directories(self):
         """Crea los directorios de salida si no existen."""
@@ -124,5 +124,5 @@ class Config:
         with open(metadata_file, 'w') as f:
             json.dump(metadata, f, indent=2)
         
-        self.logger.info(f"Run metadata saved to: {metadata_file}")
+        self.logger.info(f"metadata guardado en: {metadata_file}")
         return run_id

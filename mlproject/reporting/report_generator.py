@@ -123,15 +123,15 @@ class ReportGenerator:
         # Clustering Results
         if clustering_results:
             md.append("\n---\n")
-            md.append("## 3. Clustering Results (K-means)\n")
+            md.append("## 3. Resultados Clustering  (K-means)\n")
             
             if 'best_k' in clustering_results:
-                md.append(f"\n**Best k selected:** {clustering_results['best_k']}")
+                md.append(f"\n** k seleccionado:** {clustering_results['best_k']}")
                 md.append(f"**Selection method:** {clustering_results.get('method', 'unknown')}")
             
             # Metrics by k
             if 'metrics_by_k' in clustering_results:
-                md.append(f"\n### Metrics by k\n")
+                md.append(f"\n### Metricas por k\n")
                 md.append("| k | Inertia | Silhouette | Calinski-Harabasz | Davies-Bouldin |")
                 md.append("|---|---------|------------|-------------------|----------------|")
                 
@@ -143,7 +143,7 @@ class ReportGenerator:
             
             # Cluster sizes
             if 'cluster_sizes' in clustering_results:
-                md.append(f"\n### Cluster Sizes\n")
+                md.append(f"\n### Tamaño Cluster \n")
                 for cluster_id, size in clustering_results['cluster_sizes'].items():
                     md.append(f"- **{cluster_id}:** {size} samples")
             

@@ -45,9 +45,9 @@ class ClusteringVisualizer:
         plt.figure(figsize=(10, 6))
         plt.plot(metrics_df['k'], metrics_df['inertia'], marker='o', 
                 linewidth=2, markersize=8)
-        plt.xlabel('Number of Clusters (k)', fontsize=12)
-        plt.ylabel('Inertia (Within-cluster sum of squares)', fontsize=12)
-        plt.title('Elbow Method for Optimal k', fontsize=14, fontweight='bold')
+        plt.xlabel('Numero de Clusters (k)', fontsize=12)
+        plt.ylabel('Inertia', fontsize=12)
+        plt.title('Metodo del codo para k optimo', fontsize=14, fontweight='bold')
         plt.grid(True, alpha=0.3)
         plt.xticks(metrics_df['k'])
         plt.tight_layout()
@@ -76,9 +76,9 @@ class ClusteringVisualizer:
         plt.figure(figsize=(10, 6))
         plt.plot(metrics_df['k'], metrics_df['silhouette'], marker='o',
                 linewidth=2, markersize=8, color='darkorange')
-        plt.xlabel('Number of Clusters (k)', fontsize=12)
+        plt.xlabel('Numbero de Clusters (k)', fontsize=12)
         plt.ylabel('Silhouette Score', fontsize=12)
-        plt.title('Silhouette Score vs Number of Clusters', fontsize=14, fontweight='bold')
+        plt.title('Silhouette Score vs Numbero de Clusters', fontsize=14, fontweight='bold')
         plt.grid(True, alpha=0.3)
         plt.xticks(metrics_df['k'])
         
@@ -118,18 +118,18 @@ class ClusteringVisualizer:
         # Elbow (Inertia)
         axes[0, 0].plot(metrics_df['k'], metrics_df['inertia'], 
                        marker='o', linewidth=2, markersize=8)
-        axes[0, 0].set_xlabel('Number of Clusters (k)')
+        axes[0, 0].set_xlabel('Numbero de Clusters (k)')
         axes[0, 0].set_ylabel('Inertia')
-        axes[0, 0].set_title('Elbow Method', fontweight='bold')
+        axes[0, 0].set_title('Metodo del Codo', fontweight='bold')
         axes[0, 0].grid(True, alpha=0.3)
         axes[0, 0].set_xticks(metrics_df['k'])
         
         # Silhouette Score
         axes[0, 1].plot(metrics_df['k'], metrics_df['silhouette'], 
                        marker='o', linewidth=2, markersize=8, color='darkorange')
-        axes[0, 1].set_xlabel('Number of Clusters (k)')
+        axes[0, 1].set_xlabel('Numbero de Clusters (k)')
         axes[0, 1].set_ylabel('Silhouette Score')
-        axes[0, 1].set_title('Silhouette Score (higher is better)', fontweight='bold')
+        axes[0, 1].set_title('Silhouette Score', fontweight='bold')
         axes[0, 1].grid(True, alpha=0.3)
         axes[0, 1].set_xticks(metrics_df['k'])
         max_k = metrics_df.loc[metrics_df['silhouette'].idxmax(), 'k']
@@ -138,9 +138,9 @@ class ClusteringVisualizer:
         # Calinski-Harabasz Index
         axes[1, 0].plot(metrics_df['k'], metrics_df['calinski_harabasz'], 
                        marker='o', linewidth=2, markersize=8, color='green')
-        axes[1, 0].set_xlabel('Number of Clusters (k)')
-        axes[1, 0].set_ylabel('Calinski-Harabasz Index')
-        axes[1, 0].set_title('Calinski-Harabasz Index (higher is better)', fontweight='bold')
+        axes[1, 0].set_xlabel('Numbero de Clusters (k)')
+        axes[1, 0].set_ylabel('Calinski-Harabasz')
+        axes[1, 0].set_title('Calinski-Harabasz', fontweight='bold')
         axes[1, 0].grid(True, alpha=0.3)
         axes[1, 0].set_xticks(metrics_df['k'])
         max_k = metrics_df.loc[metrics_df['calinski_harabasz'].idxmax(), 'k']
@@ -149,9 +149,9 @@ class ClusteringVisualizer:
         # Davies-Bouldin Index
         axes[1, 1].plot(metrics_df['k'], metrics_df['davies_bouldin'], 
                        marker='o', linewidth=2, markersize=8, color='red')
-        axes[1, 1].set_xlabel('Number of Clusters (k)')
-        axes[1, 1].set_ylabel('Davies-Bouldin Index')
-        axes[1, 1].set_title('Davies-Bouldin Index (lower is better)', fontweight='bold')
+        axes[1, 1].set_xlabel('Numbero de Clusters (k)')
+        axes[1, 1].set_ylabel('Davies-Bouldin')
+        axes[1, 1].set_title('Davies-Bouldin', fontweight='bold')
         axes[1, 1].grid(True, alpha=0.3)
         axes[1, 1].set_xticks(metrics_df['k'])
         min_k = metrics_df.loc[metrics_df['davies_bouldin'].idxmin(), 'k']
@@ -162,7 +162,7 @@ class ClusteringVisualizer:
         if save:
             filename = self.figures_dir / "kmeans_all_metrics.png"
             plt.savefig(filename, dpi=300, bbox_inches='tight')
-            logger.info(f"All metrics plot saved to: {filename}")
+            logger.info(f"Metricas guardadas en: {filename}")
             plt.close()
             return str(filename)
         else:
@@ -192,7 +192,7 @@ class ClusteringVisualizer:
             if X.shape[1] == 2:
                 X_pca = X
             else:
-                logger.warning("Data not 2D and no PCA pipeline provided. Skipping PCA visualization.")
+                logger.warning("Pipeline no proporcionado, saltando visualicacion de PCA.")
                 return None
         
         # Crear scatter plot
@@ -208,9 +208,9 @@ class ClusteringVisualizer:
                        label=f'Cluster {cluster_id}',
                        alpha=0.6, s=50, edgecolors='black', linewidth=0.5)
         
-        plt.xlabel('First Principal Component', fontsize=12)
-        plt.ylabel('Second Principal Component', fontsize=12)
-        plt.title(f'K-means Clustering (k={k}) - PCA Projection', 
+        plt.xlabel('Primer Componente Principal', fontsize=12)
+        plt.ylabel('Segundo Componente Principal', fontsize=12)
+        plt.title(f'K-means Clustering (k={k}) - PCA Projeccion', 
                  fontsize=14, fontweight='bold')
         plt.legend(loc='best')
         plt.grid(True, alpha=0.3)
@@ -219,7 +219,7 @@ class ClusteringVisualizer:
         if save:
             filename = self.figures_dir / f"kmeans_pca_k{k}.png"
             plt.savefig(filename, dpi=300, bbox_inches='tight')
-            logger.info(f"PCA cluster visualization saved to: {filename}")
+            logger.info(f"visualizacion de PCA cluster guardado en: {filename}")
             plt.close()
             return str(filename)
         else:
@@ -279,8 +279,8 @@ class ClusteringVisualizer:
                        bins=20, color=colors[cluster_id], edgecolor='black')
             
             ax.set_xlabel(feat)
-            ax.set_ylabel('Frequency')
-            ax.set_title(f'Distribution of {feat}')
+            ax.set_ylabel('Frecuencia')
+            ax.set_title(f'Distribucion de {feat}')
             ax.legend()
             ax.grid(True, alpha=0.3)
         
@@ -293,7 +293,7 @@ class ClusteringVisualizer:
         if save:
             filename = self.figures_dir / f"kmeans_distributions_k{k}.png"
             plt.savefig(filename, dpi=300, bbox_inches='tight')
-            logger.info(f"Cluster distributions saved to: {filename}")
+            logger.info(f"Distribucion de Cluster guardado en: {filename}")
             plt.close()
             return str(filename)
         else:
@@ -327,8 +327,8 @@ class ClusteringVisualizer:
                     ha='center', va='bottom', fontsize=10)
         
         plt.xlabel('Cluster ID', fontsize=12)
-        plt.ylabel('Number of Samples', fontsize=12)
-        plt.title(f'Cluster Sizes (k={k})', fontsize=14, fontweight='bold')
+        plt.ylabel('Numero de Samples', fontsize=12)
+        plt.title(f'Tamaño de Cluster (k={k})', fontsize=14, fontweight='bold')
         plt.xticks(unique)
         plt.grid(True, alpha=0.3, axis='y')
         plt.tight_layout()
@@ -336,7 +336,7 @@ class ClusteringVisualizer:
         if save:
             filename = self.figures_dir / f"kmeans_cluster_sizes_k{k}.png"
             plt.savefig(filename, dpi=300, bbox_inches='tight')
-            logger.info(f"Cluster sizes plot saved to: {filename}")
+            logger.info(f"Tamaño de cluster guardado en: {filename}")
             plt.close()
             return str(filename)
         else:
@@ -359,7 +359,7 @@ class ClusteringVisualizer:
         Returns:
             Diccionario con rutas de todas las figuras
         """
-        logger.info(f"Generating full clustering report for k={k}...")
+        logger.info(f"Generando reporte de clustering para k={k}...")
         
         figures = {}
         
@@ -375,5 +375,5 @@ class ClusteringVisualizer:
             X, labels, feature_names, k
         )
         
-        logger.info(f"Full clustering report completed for k={k}")
+        logger.info(f"Reporte de clustering completado para k={k}")
         return figures

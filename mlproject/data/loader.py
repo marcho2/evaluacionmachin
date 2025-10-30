@@ -34,13 +34,13 @@ class DataLoader:
         separator = self.config.get('data.separator', ',')
         
         if not data_path.exists():
-            raise FileNotFoundError(f"Dataset not found: {data_path}")
+            raise FileNotFoundError(f"Dataset no encontrado: {data_path}")
         
-        logger.info(f"Loading dataset from: {data_path}")
+        logger.info(f"Cargando dataset desde: {data_path}")
         
         df = pd.read_csv(data_path, sep=separator)
         
-        logger.info(f"Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
+        logger.info(f"Dataset cargado: {df.shape[0]} rows, {df.shape[1]} columns")
         
         return df
     
@@ -92,7 +92,7 @@ class DataLoader:
         target_col = self.config.get('data.target_column')
         
         if target_col not in df.columns:
-            raise ValueError(f"Target column '{target_col}' not found in dataset")
+            raise ValueError(f"Columna objetivo '{target_col}' no encontrada en dataset")
         
         X = df.drop(columns=[target_col])
         y = df[target_col]
@@ -100,7 +100,7 @@ class DataLoader:
         # Para clasificación, convertir a numérico si es necesario
         task_type = self.config.get('data.task_type')
         if task_type == 'classification' and y.dtype == 'object':
-            logger.info(f"Converting target to numeric. Classes: {y.unique()}")
+            logger.info(f"Convirtiendo objetivo a numerico. Classes: {y.unique()}")
             from sklearn.preprocessing import LabelEncoder
             le = LabelEncoder()
             y = pd.Series(le.fit_transform(y), index=y.index, name=target_col)

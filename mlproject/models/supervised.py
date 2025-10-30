@@ -66,7 +66,7 @@ class SupervisedModelTrainer:
                     **params
                 )
             else:
-                raise ValueError(f"Unknown baseline model: {model_type}")
+                raise ValueError(f"Modelo desconocido: {model_type}")
         else:
             if model_type == 'ridge':
                 model = Ridge(random_state=self.config.get('random_seed', 42), **params)
@@ -76,7 +76,7 @@ class SupervisedModelTrainer:
                     **params
                 )
             else:
-                raise ValueError(f"Unknown baseline model: {model_type}")
+                raise ValueError(f"Modelo desconocido: {model_type}")
         
         logger.info(f"Baseline model created: {model_type}")
         return model
@@ -181,7 +181,7 @@ class SupervisedModelTrainer:
         Returns:
             Diccionario con resultados de CV
         """
-        logger.info(f"Training {model_name} with cross-validation...")
+        logger.info(f"Entrenando {model_name} con validacion cruzada...")
         
         # Construir pipeline completo
         pipeline = self.preprocessing_pipeline.build_full_pipeline(model)
@@ -223,7 +223,7 @@ class SupervisedModelTrainer:
         primary_std = results['cv_results'][primary_metric]['std']
         
         logger.info(f"{model_name} - {primary_metric}: {primary_mean:.4f} ± {primary_std:.4f}")
-        logger.info(f"Training time: {training_time:.2f}s")
+        logger.info(f"Tiempo de entrenamiento: {training_time:.2f}s")
         
         # Fit final en todo el train set
         pipeline.fit(X_train, y_train)
@@ -280,7 +280,7 @@ class SupervisedModelTrainer:
             return_train_score=True
         )
         
-        logger.info(f"Running RandomizedSearchCV with {n_iter} iterations...")
+        logger.info(f" RandomizedSearchCV con {n_iter} iteraciones...")
         start_time = time.time()
         random_search.fit(X_train, y_train)
         training_time = time.time() - start_time
@@ -295,8 +295,8 @@ class SupervisedModelTrainer:
         }
         
         logger.info(f"Best {primary_metric}: {results['best_score']:.4f}")
-        logger.info(f"Best params: {results['best_params']}")
-        logger.info(f"Time: {training_time:.2f}s")
+        logger.info(f"Mejores parametros: {results['best_params']}")
+        logger.info(f"Tiempo: {training_time:.2f}s")
         
         return results, random_search.best_estimator_
     
@@ -367,8 +367,8 @@ class SupervisedModelTrainer:
         }
         
         logger.info(f"Best {primary_metric}: {results['best_score']:.4f}")
-        logger.info(f"Best params: {results['best_params']}")
-        logger.info(f"Time: {training_time:.2f}s")
+        logger.info(f"Mejores parametros: {results['best_params']}")
+        logger.info(f"Tiempo: {training_time:.2f}s")
         
         return results, grid_search.best_estimator_
     
@@ -455,6 +455,6 @@ class SupervisedModelTrainer:
             filename = models_dir / f"{model_name}_{timestamp}.joblib"
         
         joblib.dump(pipeline, filename)
-        logger.info(f"Model saved to: {filename}")
+        logger.info(f"Modelo guardado en: {filename}")
         
         return filename

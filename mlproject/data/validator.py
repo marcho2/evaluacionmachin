@@ -52,13 +52,13 @@ class DataValidator:
         }
         
         if missing_cols:
-            logger.error(f"Missing columns: {missing_cols}")
+            logger.error(f"COlumnas faltantes: {missing_cols}")
             return False
         
         if extra_cols:
-            logger.warning(f"Extra columns found: {extra_cols}")
+            logger.warning(f"Columnas Extras encontradas: {extra_cols}")
         
-        logger.info("Schema validation passed")
+        logger.info("Validacion de schema(esquema) completa")
         return True
     
     def validate_nulls(self, df: pd.DataFrame) -> bool:
@@ -83,10 +83,10 @@ class DataValidator:
         }
         
         if len(problematic_cols) > 0:
-            logger.warning(f"Columns with high null percentage: {problematic_cols.to_dict()}")
+            logger.warning(f"Columnas con alto porcentaje de nulos: {problematic_cols.to_dict()}")
             return False
         
-        logger.info("Null validation passed")
+        logger.info("Validacion de nulos completa")
         return True
     
     def generate_data_summary(self, df: pd.DataFrame) -> Dict[str, Any]:
@@ -160,6 +160,6 @@ class DataValidator:
         with open(report_file, 'w') as f:
             json.dump(self.validation_report, f, indent=2)
         
-        logger.info(f"Validation report saved to: {report_file}")
+        logger.info(f"Reporte de Validacion guardado en: {report_file}")
         
         return report_file

@@ -54,7 +54,7 @@ class PreprocessingPipeline:
             logger.info(f"Categorical features ({len(self.categorical_features)}): {self.categorical_features[:5]}...")
         
         if not transformers:
-            raise ValueError("No features specified for preprocessing")
+            raise ValueError("No features especificado para preprocesamiento")
         
         self.preprocessor = ColumnTransformer(
             transformers=transformers,
@@ -84,7 +84,7 @@ class PreprocessingPipeline:
         elif scaling_method == 'minmax':
             scaler = MinMaxScaler()
         else:
-            raise ValueError(f"Unknown scaling method: {scaling_method}")
+            raise ValueError(f"Metodo de escalamiento desconocido: {scaling_method}")
         
         steps.append(('scaler', scaler))
         
@@ -112,7 +112,7 @@ class PreprocessingPipeline:
             drop='first'  # Evitar multicolinealidad
         )))
         
-        logger.info(f"Categorical pipeline: imputation={imputation_strategy}, encoding=one-hot")
+        logger.info(f"Pipeline Categorico: imputation={imputation_strategy}, encoding=one-hot")
         
         return Pipeline(steps)
     
@@ -144,13 +144,13 @@ class PreprocessingPipeline:
                     n_components=min(50, len(self.numeric_features) + len(self.categorical_features) - 1),
                     random_state=self.config.get('random_seed', 42)
                 )
-                logger.info(f"Using TruncatedSVD (for sparse matrices)")
+                logger.info(f"TruncatedSVD")
             else:
                 pca = PCA(
                     n_components=variance_ratio,
                     random_state=self.config.get('random_seed', 42)
                 )
-                logger.info(f"Using PCA with variance_ratio={variance_ratio}")
+                logger.info(f"Usando PCA con variance_ratio={variance_ratio}")
             
             steps.append(('pca', pca))
             self.pca_transformer = pca
@@ -159,7 +159,7 @@ class PreprocessingPipeline:
         steps.append(('model', estimator))
         
         pipeline = Pipeline(steps)
-        logger.info(f"Full pipeline built with {len(steps)} steps")
+        logger.info(f"Pipeline con {len(steps)} steps")
         
         return pipeline
     
@@ -177,7 +177,7 @@ class PreprocessingPipeline:
             fitted_preprocessor = self.preprocessor
         
         if fitted_preprocessor is None:
-            raise ValueError("Preprocessor not built or fitted yet")
+            raise ValueError("Preprocesamiento no hecho")
         
         feature_names = []
         
@@ -195,7 +195,7 @@ class PreprocessingPipeline:
                 cat_feature_names = encoder.get_feature_names_out(self.categorical_features)
                 feature_names.extend(cat_feature_names)
             except Exception as e:
-                logger.warning(f"Could not extract categorical feature names: {e}")
+                logger.warning(f"No se pudo extraer nombres categoricos: {e}")
                 # Fallback: usar nombres genéricos
                 feature_names.extend([f"cat_{i}" for i in range(len(self.categorical_features))])
         
@@ -225,8 +225,8 @@ class PreprocessingPipeline:
         if hasattr(pca, 'explained_variance_'):
             info['explained_variance'] = pca.explained_variance_.tolist()
         
-        logger.info(f"PCA reduced to {pca.n_components_} components")
-        logger.info(f"Total variance explained: {info['cumulative_variance'][-1]:.4f}")
+        logger.info(f"PCA reducido a {pca.n_components_} componentes")
+        logger.info(f"Varianza total: {info['cumulative_variance'][-1]:.4f}")
         
         return info
 
@@ -286,7 +286,7 @@ class KMeansPipeline:
         steps.append(('kmeans', kmeans))
         
         pipeline = Pipeline(steps)
-        logger.info(f"K-means pipeline built with k={k}")
+        logger.info(f"K-means pipeline construido con k={k}")
         
         return pipeline
     
@@ -317,6 +317,6 @@ class KMeansPipeline:
             ('pca', PCA(n_components=n_components, random_state=self.config.get('random_seed', 42)))
         ])
         
-        logger.info(f"PCA visualization pipeline built with {n_components} components")
+        logger.info(f"Pipeline de PCA hecho con {n_components} componentes")
         
         return pipeline
