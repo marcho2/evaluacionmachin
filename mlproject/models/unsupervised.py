@@ -59,6 +59,9 @@ class KMeansAnalyzer:
             pipeline = self.kmeans_pipeline_builder.build_kmeans_pipeline(k)
             pipeline.fit(X_train)
             
+            # Guardar pipeline PRIMERO (antes de calcular métricas)
+            self.fitted_pipelines[k] = pipeline
+            
             # Obtener datos transformados y labels
             X_transformed = pipeline.named_steps['preprocessor'].transform(X_train)
             labels = pipeline.named_steps['kmeans'].labels_
@@ -66,9 +69,6 @@ class KMeansAnalyzer:
             # Calcular métricas
             metrics = self._calculate_metrics(X_transformed, labels, k)
             metrics_list.append(metrics)
-            
-            # Guardar pipeline
-            self.fitted_pipelines[k] = pipeline
             
             logger.info(f"k={k}: inertia={metrics['inertia']:.2f}, "
                        f"silhouette={metrics['silhouette']:.4f}, "
